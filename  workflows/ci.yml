@@ -1,21 +1,31 @@
-steps:
-  - name: Checkout code
-    uses: actions/checkout@v4
+name: Selenium CI
 
-  - name: Setup Java
-    uses: actions/setup-java@v4
-    with:
-      distribution: temurin
-      java-version: 17
+on:
+  push:
+    branches: [ "main" ]
 
-  - name: Run tests
-    run: mvn clean test
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-  - name: Generate Allure Report
-    run: mvn allure:report
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  - name: Upload Allure Results
-    uses: actions/upload-artifact@v4
-    with:
-      name: allure-results
-      path: target/allure-results
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Run tests
+        run: mvn clean test
+
+      - name: Generate Allure Report
+        run: mvn allure:report
+
+      - name: Upload Allure Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
